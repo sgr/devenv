@@ -1,0 +1,14 @@
+FROM alpine:3.6
+ENV HOME /root
+WORKDIR ${HOME}
+
+RUN set -x \
+ && sed -i.bak -e "s/3.4/3.5/" /etc/apk/repositories \
+ && apk --update upgrade \
+ && apk --no-cache add openssl git \
+ && apk add bash emacs make texinfo screen \
+ && wget https://gist.githubusercontent.com/sgr/84b01dba724fec236b8b1af72065319d/raw/d736e1440674f1a8b014d745f2a5b3774008d229/.screenrc \
+ && echo -e "\nexec >/dev/tty 2>/dev/tty </dev/tty" >> .bashrc \
+ && git clone https://github.com/sgr/.emacs.d.git /root/.emacs.d \
+ && emacs --batch -l /root/.emacs.d/init.el \
+ && rm -fr /root/.cache/
